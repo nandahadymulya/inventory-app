@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel, Session
 from .configs.database import engine
 from .services.roles import read_roles
@@ -8,7 +9,6 @@ from .models.roles import Roles as RolesModel
 from .models.users import Users as UsersModel
 from .models.items import Items as ItemsModel
 
-
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
@@ -17,6 +17,22 @@ app = FastAPI(
     description="A simple inventory API built with FastAPI",
     author="Nanda Hady Mulya",
 )
+
+
+# cors
+origins = [
+    "*",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.on_event("startup")
 def on_startup():
