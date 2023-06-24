@@ -3,7 +3,7 @@ from sqlmodel import Field, SQLModel
 
 
 class UserBase(SQLModel):
-    fullname: Optional[str] = Field(index=True)
+    fullname: Optional[str] = Field(default="", index=True)
     username: str = Field(index=True)
     role_id: Optional[int] = Field(default=None, foreign_key="roles.role_id")
 

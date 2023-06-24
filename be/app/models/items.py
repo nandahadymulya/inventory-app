@@ -4,7 +4,7 @@ from sqlmodel import Field, SQLModel
 
 class ItemBase(SQLModel):
     name: str = Field(index=True)
-    description: Optional[str] = Field(index=True)
+    description: Optional[str] = Field(default="",index=True)
     quantity: int = Field(index=True)
 
 class Items(ItemBase, table=True):
@@ -15,6 +15,6 @@ class ItemRead(ItemBase):
 
 class ItemCreate(ItemBase):
     item_id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
+    name: Optional[str] = ""
     description: str
     quantity: int
