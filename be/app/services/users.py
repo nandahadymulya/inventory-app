@@ -16,9 +16,8 @@ def read_users(
     users = session.exec(select(Users).offset(offset).limit(limit)).all()
     return users
 
-
-# def read_role_by_id(*, session: Session, role_id: int):
-#     role = session.get(RolesRead, role_id)
-#     if not role:
-#         raise HTTPException(status_code=404, detail="role not found")
-#     return role
+def read_user_by_id(session: Session, user_id: int):
+    user = session.get(Users, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="user not found")
+    return user

@@ -17,9 +17,8 @@ def read_roles(
     print(roles)
     return roles
 
-
-# def read_role_by_id(*, session: Session, role_id: int):
-#     role = session.get(RolesRead, role_id)
-#     if not role:
-#         raise HTTPException(status_code=404, detail="role not found")
-#     return role
+def read_role_by_id(session: Session, role_id: int):
+    role = session.get(Roles, role_id)
+    if not role:
+        raise HTTPException(status_code=404, detail="role not found")
+    return role

@@ -1,31 +1,31 @@
-from typing import Optional, List
-from sqlmodel import Field, SQLModel, Relationship
-from .roles import Roles
+from typing import Optional
+from sqlmodel import Field, SQLModel
+
 
 class UserBase(SQLModel):
-    fullname: str = Field(index=True)
+    fullname: Optional[str] = Field(index=True)
     username: str = Field(index=True)
-
-    # role_id: Optional[int] = Field(default=None, foreign_key="roles.role_id")
-
+    role_id: Optional[int] = Field(default=None, foreign_key="roles.role_id")
 
 class Users(UserBase, table=True):
     user_id: Optional[int] = Field(default=None, primary_key=True)
 
-    # role: Optional[Roles] = Relationship(back_populates="users")
-
-
 class UserRead(UserBase):
-    fullname: str
-    username: str
-
+    user_id: int
+    role_id: int = Field(default=None, foreign_key="roles.role_id")
 
 class UserCreate(UserBase):
-    pass
+    fullname: Optional[str] = ""
+    username: str
+    password: str
+    role_id: Optional[int] = Field(default=None, foreign_key="roles.role_id")
 
-
-class UserUpdate(SQLModel):
+class UserDelete(UserBase):
     fullname: Optional[str] = None
-    username: Optional[str] = None
+    password: Optional[str] = None
+    role_id: Optional[int] = None
+
+class UserUpdate(UserBase):
+    fullname: Optional[str] = None
     password: Optional[str] = None
     role_id: Optional[int] = None
