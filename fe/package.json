@@ -10,7 +10,13 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@nuxtjs/tailwindcss": "^6.8.0",
     "@types/node": "^18",
-    "nuxt": "^3.5.2"
+    "nuxt": "^3.6.0",
+    "nuxt-icon": "^0.4.1",
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "@typescript-eslint/typescript-estree": "^5.60.0"
   }
 }
