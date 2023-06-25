@@ -8,5 +8,5 @@ class RolesBase(SQLModel):
 class Roles(RolesBase, table=True):
     role_id: Optional[int] = Field(default=None, primary_key=True)
 
-class RolesRead(RolesBase):
-    role_id: int
+class RoleRead(RolesBase):
+    name: str = Field(unique=True, index=True)

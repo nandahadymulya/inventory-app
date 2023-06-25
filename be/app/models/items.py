@@ -14,7 +14,6 @@ class ItemRead(ItemBase):
     item_id: int
 
 class ItemCreate(ItemBase):
-    item_id: Optional[int] = Field(default=None, primary_key=True)
-    name: Optional[str] = ""
+    name: str
     description: str
     quantity: int
