@@ -1,6 +1,7 @@
+from typing import Annotated, Union
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlmodel import SQLModel, Session
 from .configs.database import engine
 from .services.auth import login, get_current_user
@@ -33,7 +34,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 def get_session():
     with Session(bind=engine) as session:
@@ -49,14 +50,14 @@ async def read_root():
 
 # Auth API
 @app.post("/auth/register", response_model=UserCreate, tags=["Auth"], description="Register user")
-async def post_register(user: UserCreate,session: Session = Depends(get_session)):
+async def post_register(user: UserCreate, session: Session = Depends(get_session)):
     registered_user = create_user(session, user)
     return registered_user
 
 
 @app.post("/auth/login", tags=["Auth"], description="Login to get token")
-async def post_login(username: str, password: str, session: Session = Depends(get_session)):
-    isUserLoggedIn = login(session, username, password)
+async def post_login(credential: Annotated[OAuth2PasswordRequestForm, Depends()], session: Session = Depends(get_session)):
+    isUserLoggedIn = login(session, credential)
     return isUserLoggedIn
 
 @app.get("/auth/me", tags=["Auth"], description="Get current user with token")
