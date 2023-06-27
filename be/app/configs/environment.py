@@ -20,6 +20,7 @@ class EnvironmentSettings(BaseSettings):
     DATABASE_PORT: int
     DATABASE_USERNAME: str
     DEBUG_MODE: bool
+    SECRET_KEY: str
 
     class Config:
         env_file = get_env_filename()

@@ -1,15 +1,17 @@
 from fastapi import HTTPException, Query
 from sqlmodel import Session, select
 from ..models.users import Users, UserRead
+from passlib.context import CryptContext
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def create_user(session: Session, role: UserRead):
-    db_user = Users(**role.dict())
+def create_user(session: Session, user: UserRead):
+    db_user = Users(**user.dict())
     already_exists = session.exec(select(Users).where(Users.username == db_user.username)).first()
     if already_exists:
         raise HTTPException(status_code=400, detail="user already exists")
-    # hash password
-    # db_user.password =
+    db_user.password = pwd_context.hash(db_user.password)
+
     session.add(db_user)
     session.commit()
     session.refresh(db_user)

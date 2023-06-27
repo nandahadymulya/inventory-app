@@ -1,5 +1,6 @@
-from sqlmodel import create_engine
+from sqlmodel import SQLModel, create_engine
 from .environment import get_environment_variables
+
 
 env = get_environment_variables()
 
@@ -11,5 +12,9 @@ engine = create_engine(
 
 def get_engine():
     return engine
-# SessionLocal = sessionmaker(autocommit=False, autoflush=True, bind=engine, future=True)
-# Base = declarative_base()
+
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+def drop_db_and_tables():
+    SQLModel.metadata.drop_all(engine)

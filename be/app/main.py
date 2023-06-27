@@ -1,20 +1,22 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import SQLModel, Session
 from .configs.database import engine
+from .services.auth import login, get_current_user
 from .services.roles import create_role, read_roles, read_role_by_id, update_role, destroy_role
 from .services.users import create_user, read_users, read_user_by_id, update_user, destroy_user
 from .services.items import create_item, read_items, read_item_by_id,update_item, destroy_item
 from .models.roles import RoleRead
-from .models.users import Users as UsersModel, UserRead
-from .models.items import Items as ItemsModel, ItemRead, ItemCreate
+from .models.users import UserRead, UserCreate
+from .models.items import ItemRead, ItemCreate
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
 app = FastAPI(
     title="FastAPI Inventory App",
-    description="A simple Inventory App API built with FastAPI",
+    description="A simple Inventory App API built with FastAPI and SQLModel",
     author="Nanda Hady Mulya",
 )
 
@@ -31,6 +33,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+
 def get_session():
     with Session(bind=engine) as session:
         yield session
@@ -44,13 +48,21 @@ async def read_root():
     return {"message": "Welcome to Inventory App!"}
 
 # Auth API
-@app.post("/auth/register", tags=["Auth"], description="Register user")
-async def post_register():
-    pass
+@app.post("/auth/register", response_model=UserCreate, tags=["Auth"], description="Register user")
+async def post_register(user: UserCreate,session: Session = Depends(get_session)):
+    registered_user = create_user(session, user)
+    return registered_user
+
 
 @app.post("/auth/login", tags=["Auth"], description="Login to get token")
-async def post_login():
-    pass
+async def post_login(username: str, password: str, session: Session = Depends(get_session)):
+    isUserLoggedIn = login(session, username, password)
+    return isUserLoggedIn
+
+@app.get("/auth/me", tags=["Auth"], description="Get current user with token")
+async def get_me(token: str):
+    current_user = get_current_user(token)
+    return current_user
 
 @app.post("/auth/logout", tags=["Auth"], description="Logout from token")
 async def post_logout():

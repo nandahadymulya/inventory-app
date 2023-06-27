@@ -30,6 +30,7 @@ CREATE TABLE user_items (
   user_item_id SERIAL PRIMARY KEY,
   user_id INT NOT NULL,
   item_id INT NOT NULL,
+  amount INT NOT NULL DEFAULT 0,
   CONSTRAINT fk_user_item FOREIGN KEY(user_id) REFERENCES users(user_id),
   CONSTRAINT fk_item FOREIGN KEY(item_id) REFERENCES items(item_id)
 );
