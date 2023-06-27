@@ -11,12 +11,16 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxtjs/tailwindcss": "^6.8.0",
+    "@pinia-plugin-persistedstate/nuxt": "^1.1.1",
     "@types/node": "^18",
     "nuxt": "^3.6.0",
     "nuxt-icon": "^0.4.1",
     "typescript": "latest"
   },
   "dependencies": {
-    "@typescript-eslint/typescript-estree": "^5.60.0"
+    "@pinia/nuxt": "^0.4.11",
+    "@typescript-eslint/typescript-estree": "^5.60.0",
+    "pinia": "^2.1.4",
+    "yup": "^1.2.0"
   }
 }

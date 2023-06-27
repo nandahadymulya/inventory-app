@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/stores/auth.js";
+
 definePageMeta({
   layout: "blank",
 });
@@ -17,10 +18,16 @@ let loginForm: loginForm = {
   password: "",
 };
 
-function login() {
-  authStore.fetchAuth(loginForm.username, loginForm.password);
+const login = async () => {
+  const formData = new FormData();
+  formData.append("username", loginForm.username);
+  formData.append("password", loginForm.password);
+  try {
+    await authStore.fetchAuth(formData);
+  } catch (error) {}
+
   router.push("/");
-}
+};
 
 const message = ref("");
 // const showMessage = (msg) => {
@@ -28,26 +35,6 @@ const message = ref("");
 //   setTimeout(() => {
 //     message.value = "";
 //   }, 1000);
-// };
-
-// const form = ref({
-//   username: "",
-//   password: "",
-// });
-
-// const login = async (username, password) => {
-//   if (username == "" || password == "") {
-//     showMessage("Username or password cannot be empty");
-//     return;
-//   }
-//   let payload = {
-//     username: username,
-//     password: password,
-//   };
-//   await fetchLogin(payload);
-//   // clear
-//   form.value.username = "";
-//   form.value.password = "";
 // };
 
 const passwordType = ref(true);

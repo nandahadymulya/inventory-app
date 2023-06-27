@@ -1,4 +1,11 @@
 <script setup>
+import { useAuthStore } from "@/stores/auth.js";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const authStore = useAuthStore();
+const isAuth = computed(() => authStore.getIsAuthenticated);
+
 const isMenuOpen = ref(false);
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
@@ -9,6 +16,11 @@ const menus = ref([
   { name: "Items", to: "/items" },
   { name: "Users", to: "/users" },
 ]);
+
+const logout = () => {
+  localStorage.removeItem("token");
+  router.push("/login");
+};
 </script>
 
 <template>
@@ -43,6 +55,20 @@ const menus = ref([
             <NuxtLink :to="menu.to" class="text-white hover:text-gray-300">
               <li>{{ menu.name }}</li>
             </NuxtLink>
+          </div>
+          <div v-if="isAuth !== true">
+            <NuxtLink to="/login" class="text-white hover:text-gray-300">
+              <li>Login</li>
+            </NuxtLink>
+          </div>
+          <div v-else>
+            <button
+              to="/"
+              @click="logout"
+              class="text-white hover:text-gray-300"
+            >
+              <li>Logout</li>
+            </button>
           </div>
         </ul>
       </nav>
