@@ -1,7 +1,7 @@
-from typing import Annotated, Union
+from typing import Annotated
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import SQLModel, Session
 from .configs.database import engine
 from .services.auth import login, get_current_user
@@ -33,8 +33,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 def get_session():
     with Session(bind=engine) as session:
